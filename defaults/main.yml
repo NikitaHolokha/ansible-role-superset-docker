@@ -1,2 +1,13 @@
 ---
-# defaults file for ansible-role-superset-docker
+# defaults file for ansible-role-docker-superset
+
+username: ubuntu
+group_name: ubuntu
+
+superset_node_type: main
+
+ssl_enable: false
+
+install_docker: true
+
+env_file_path: ""

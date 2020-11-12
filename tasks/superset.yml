@@ -1,0 +1,47 @@
+---
+
+- name: Check if repo exists
+  stat:
+    path: "/home/{{ username }}/superset-docker-compose"
+  register: superset_git
+
+- name: Clone superset-docker-compose repo
+  git:
+    repo: "https://github.com/insight-infrastructure/superset-docker-compose"
+    dest: "/home/{{ username }}/superset"
+  become_user: "{{ username }}"
+  when: superset_git.stat.exists == false
+
+- name: Create cert directory if it does not exist
+  file:
+    path: "/home/{{ username }}/superset/certs"
+    state: directory
+    mode: '0600'
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
+
+- name: Move cert to certs
+  command: cp /etc/letsencrypt/live/{{ fqdn }}/fullchain.pem /home/{{ username }}/superset/certs/fullchain.pem
+  when: ssl_enable
+
+- name: Move key to certs
+  command: cp /etc/letsencrypt/live/{{ fqdn }}/privkey.pem /home/{{ username }}/superset/certs/privkey.pem
+  when: ssl_enable
+
+- name: Rename override file per the type of superset deployment (ie worker)
+  command: mv /home/{{ username }}/superset/docker-compose.worker.override /home/{{ username }}/superset/docker-compose.override
+  when: superset_node_type == 'worker'
+
+- name: Render env file
+  template:
+    src: "{{ env_file_path }}"
+    dest: "/home/{{ admin_user }}/superset/.env"
+    mode: '0644'
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
+  when: env_file_path != ""
+
+- name: Start node application via docker-compose
+  shell:
+    cmd: docker-compose up -d
+    chdir: "/home/{{ username }}/superset"
