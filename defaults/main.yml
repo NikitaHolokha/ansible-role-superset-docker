@@ -11,3 +11,11 @@ ssl_enable: false
 install_docker: true
 
 env_file_path: ""
+
+
+configure_admin: true
+superset_username: superset
+superset_firstname: superset
+superset_lastname: superset
+superset_password: changemenow
+superset_email: admin@gmail.com
