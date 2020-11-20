@@ -4,7 +4,7 @@
 - include: docker.yml
   when: install_docker
 
+- include: superset.yml
+
 - include: ssl.yml
   when: ssl_enable
-
-- include: superset.yml

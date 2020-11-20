@@ -1,0 +1,5 @@
+
+- name: restart docker-compose
+  shell:
+    cmd: docker-compose up -d
+    chdir: "/home/{{ username }}/superset"
