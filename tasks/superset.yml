@@ -20,14 +20,6 @@
     owner: "{{ username }}"
     group: "{{ group_name }}"
 
-- name: Move cert to certs
-  command: cp /etc/letsencrypt/live/{{ fqdn }}/fullchain.pem /home/{{ username }}/superset/certs/fullchain.pem
-  when: ssl_enable
-
-- name: Move key to certs
-  command: cp /etc/letsencrypt/live/{{ fqdn }}/privkey.pem /home/{{ username }}/superset/certs/privkey.pem
-  when: ssl_enable
-
 - name: Rename override file per the type of superset deployment (ie worker)
   command: mv /home/{{ username }}/superset/docker-compose.worker.override /home/{{ username }}/superset/docker-compose.override
   when: superset_node_type == 'worker'
