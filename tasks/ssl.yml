@@ -1,5 +1,10 @@
 ---
 
+- name: Stop node application to clear up port 80 for certbot challenge
+  shell:
+    cmd: docker-compose stop
+    chdir: "/home/{{ username }}/superset"
+
 - name: Run certbot for SSL
   include_role:
     name: geerlingguy.certbot
