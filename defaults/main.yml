@@ -8,11 +8,11 @@ superset_node_type: main
 
 ssl_enable: false
 fqdn: ""
+certbot_admin_email: "admin@example.com"
 
 install_docker: true
 
 env_file_path: ""
-
 
 configure_admin: true
 superset_username: superset

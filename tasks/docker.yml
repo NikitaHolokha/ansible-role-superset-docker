@@ -39,6 +39,5 @@
     state: present
   vars:
     pippkgs:
-      - pip
       - docker
       - docker-compose
