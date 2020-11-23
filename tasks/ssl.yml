@@ -35,3 +35,8 @@
     dest: "/home/{{ username }}/superset/nginx/superset.conf"
   notify:
     - restart docker-compose
+
+- name: Stop node application to clear up port 80 for certbot challenge
+  shell:
+    cmd: docker-compose -f docker-compose.yml -f docker-compose.override.ssl.yml up -d
+    chdir: "/home/{{ username }}/superset"
