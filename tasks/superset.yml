@@ -12,14 +12,6 @@
   become_user: "{{ username }}"
   when: superset_git.stat.exists == false
 
-- name: Create cert directory if it does not exist
-  file:
-    path: "/home/{{ username }}/superset/certs"
-    state: directory
-    mode: '0600'
-    owner: "{{ username }}"
-    group: "{{ group_name }}"
-
 - name: Rename override file per the type of superset deployment (ie worker)
   command: mv /home/{{ username }}/superset/docker-compose.worker.override /home/{{ username }}/superset/docker-compose.override
   when: superset_node_type == 'worker'
@@ -40,3 +32,12 @@
       --email "{{ superset_email }}" \
       --password "{{ superset_password }}"
   when: configure_admin
+
+- name: Copy over database yaml template
+  copy:
+    src: "{{ superset_database_import_yaml_path }}"
+    dest: "/home/{{ username }}/superset/superset/database_sources.yaml"
+
+- name: Import the databases
+  command: docker-compose exec superset superset import_datasources -p /etc/superset/dbs.yaml
+  when: superset_database_import_yaml_path != ""

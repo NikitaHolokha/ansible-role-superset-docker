@@ -10,6 +10,8 @@ ssl_enable: false
 fqdn: ""
 certbot_admin_email: "admin@example.com"
 
+superset_database_import_yaml_path: ""
+
 install_docker: true
 
 env_file_path: ""
